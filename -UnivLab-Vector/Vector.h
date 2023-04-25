@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <iostream>
 
@@ -22,7 +22,7 @@ public:
 
 	//Vector() : this-vector_dim(0) {}
 
-	Vector(const Vector& other) : dim(other.dim) {
+	Vector(const Vector<T>& other) : dim(other.dim) {
 		this->array = new T[this->dim];
 		for (size_t i = 0; i < this->dim; i++) {
 			this->array[i] = other.array[i];
@@ -33,11 +33,69 @@ public:
 		delete[] this->array;
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const Vector& vector) {
+
+	T& operator[] (size_t index) const {
+		return this->array[index];
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Vector<T>& vector) {
 		for (size_t i = 0; i < vector.dim; i++) {
-			os << vector.array[i] << " ";
+			os << vector[i] << " ";
 		}
 		return os;
 	}
-};
 
+	Vector<T> operator+ (const Vector<T>& other) {
+		Vector<T> res(other.dim);
+		for (size_t i = 0; i < res.dim; i++) {
+			res[i] = (*this)[i] + other[i];
+		}
+
+		return res;
+	}
+
+	Vector<T> operator+ (T term) {
+		Vector<T> res(this->dim);
+		for (size_t i = 0; i < res.dim; i++) {
+			res[i] = (*this)[i] + term;
+		}
+
+		return res;
+	}
+
+	Vector<T> operator- (const Vector<T>& other) {
+		Vector<T> res(other.dim);
+		for (size_t i = 0; i < res.dim; i++) {
+			res[i] = (*this)[i] - other[i];
+		}
+
+		return res;
+	}
+
+	Vector<T> operator- (T term) {
+		Vector<T> res(this->dim);
+		for (size_t i = 0; i < res.dim; i++) {
+			res[i] = (*this)[i] - term;
+		}
+
+		return res;
+	}
+
+	Vector<T> operator* (T mult) {
+		Vector<T> res(this->dim);
+		for (size_t i = 0; i < res.dim; i++) {
+			res[i] = (*this)[i] * mult;
+		}
+
+		return res;
+	}
+
+	T operator* (const Vector<T>& other) {
+		T res = 0;
+		for (size_t i = 0; i < this->dim; i++) {
+			res += (*this)[i] * other[i];
+		}
+
+		return res;
+	}
+};
